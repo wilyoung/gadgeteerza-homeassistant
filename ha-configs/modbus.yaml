@@ -1,8 +1,11 @@
 # Victron Configuration.  // If you require stats from your victron system you must have a Venus device installed as part of your Victron installation. This does not use VRM.This users MODBUS
 # com.victronenergy.system  slave: 100
-# Multiplus slave: 246
-# Smartsolar Charger slave: 247
-# BalancelCell Battery slave: 245
+# Multiplus slave: 246 now 227
+# Fronius Gen24 slave: 21
+# Fronius Symo slave: 20
+# Grid Meter 31
+# Smartsolar Charger slave: 247 not used
+# BalancelCell Battery slave: 245 now 226
 # 
 #modbus:
   - name: victron
@@ -12,7 +15,7 @@
     delay: 5
     timeout: 5
     retries: 10
-    host: 192.168.1.205
+    host: 192.168.0.250
     port: 502
     sensors:
       - name: "Battery SOC"   # // Best battery state of charge, determined from different measurements. read from //com.victronenergy.system
@@ -104,34 +107,34 @@
       - name: "Grid Lost Alarm" # \\ 0=Ok;2=Alarm
         scale: 1
         precision: 0
-        slave: 246
+        slave: 227
         address: 64
         data_type: 'uint16'
         
       - name: "Temp alarm" # \\ 0=Ok;1=Warning;2=Alarm
         scale: 1
         precision: 1
-        slave: 246
+        slave: 227
         address: 34
         data_type: uint16
         
       - name: "Low bat alarm" # \\ 0=Ok;1=Warning;2=Alarm
         scale: 1
         precision: 1
-        slave: 246
+        slave: 227
         address: 35
         
       - name: "Overload alarm" # \\ 0=Ok;1=Warning;2=Alarm
         scale: 1
         precision: 1
-        slave: 246
+        slave: 227
         address: 36
 
       - name: "VE.Bus state" # \\ 0=Off;1=Low Power;2=Fault;3=Bulk;4=Absorption;5=Float;6=Storage;7=Equalize;8=Passthru;9=Inverting;10=Power assist;11=Power supply;252=Bulk protection
         scale: 1
         precision: 1
         scan_interval: 5
-        slave: 246
+        slave: 227
         address: 31
         
       - name: "Victron battery min SoC"
@@ -152,7 +155,7 @@
 
 ###############################################################
 #                                                             #
-#     Sensor Configurations - Battery Device ID          225  #
+#     Sensor Configurations - Battery Device ID          226  #
 #                                                             #
 ###############################################################
         
@@ -160,27 +163,27 @@
         scale: 0.1
         precision: 1
         scan_interval: 60
-        slave: 225
+        slave: 226
         address: 262
         
       - name: "Solar Battery General Alarm"  # \\ 0=No alarm;2=Alarm
         scale: 1
         precision: 0
-        slave: 225
+        slave: 226
         address: 267
         
       - name: "Solar Battery Low Temp"  # \\ 0=No alarm;2=Alarm
         scale: 1
         precision: 0
         scan_interval: 60
-        slave: 225
+        slave: 226
         address: 273
         
       - name: "Solar Battery High Temp"  # \\ 0=No alarm;2=Alarm
         scale: 1
         precision: 0
         scan_interval: 60
-        slave: 225
+        slave: 226
         address: 274
         
       - name: "Solar Battery Deepest Discharge"  # \\ Ah
@@ -188,14 +191,14 @@
         scale: 1
         precision: 1
         scan_interval: 60
-        slave: 225
+        slave: 226
         address: 281
         
       - name: "Solar Battery Cycles"
         scale: 1
         precision: 0
         scan_interval: 3600
-        slave: 225
+        slave: 226
         address: 285
         
       - name: "Solar Battery Last Full Charge" # \\ Seconds
@@ -203,14 +206,14 @@
         scale: 0.01
         precision: 0
         scan_interval: 3600
-        slave: 225
+        slave: 226
         address: 289
         
       - name: "Solar Battery Time To Go"  # \\ Seconds
         scale: 0.01
         precision: 0
         scan_interval: 60
-        slave: 225
+        slave: 226
         address: 303
         
       - name: "Solar Battery Health"   # \\ Percent
@@ -218,75 +221,14 @@
         scale: 0.1
         precision: 1
         scan_interval: 3600
-        slave: 225
+        slave: 226
         address: 304
         
       - name: "Solar Battery Cell Imbalance Alarm"  #  \\ 0=No alarm;2=Alarm
         scale: 1
         precision: 0
         scan_interval: 60
-        slave: 225
+        slave: 226
         address: 322
 
         
-###############################################################
-#                                                             #
-#     Sensor Configurations - com.victronenergy.solarcharger  #
-#                                                             #
-###############################################################
-
-#      - name: "Solar charger state" # \\ 0=Off;2=Fault;3=Bulk;4=Absorption;5=Float;6=Storage;7=Equalize;11=Other (Hub-1);252=External control - Stays on external control
-#        scale: 1
-#        precision: 0
-#        scan_interval: 5
-#        slave: 247
-#        address: 775
-
-      - name: "PV voltage" # \\ Not available if multiple VE.Can chargers are combined
-        unit_of_measurement: "V"
-        scale: 0.01
-        slave: 247
-        address: 776
-
-      - name: "PV Power Charger" # \\ Not available if multiple VE.Can chargers are combined
-        unit_of_measurement: "W"
-        scale: 0.1
-        precision: 0
-        scan_interval: 5
-        slave: 247
-        address: 789
-        device_class: energy
-                
-      - name: "Yield so far today" # \\ Today's yield
-        unit_of_measurement: "kWh"
-        scale: 0.1
-        precision: 3
-        slave: 247
-        address: 784
-
-      - name: "Maximum charge power today" # \\ Today's maximum power
-        unit_of_measurement: "W"
-        scale: 1
-        precision: 0
-        slave: 247
-        address: 785
-
-      - name: "Yield total yesterday" # \\ Yesterdays's yield
-        unit_of_measurement: "kWh"
-        scale: 0.1
-        precision: 3
-        slave: 247
-        address: 786
-
-      - name: "Maximum charge power yesterday" # \\ Yesterdays's maximum power
-        unit_of_measurement: "W"
-        scale: 1
-        precision: 0
-        slave: 247
-        address: 787
-
-      - name: "Solar charger error" # \\ 0=No error;1=Battery temperature too high;2=Battery voltage too high;3=Battery temperature sensor miswired (+);4=Battery temperature sensor miswired (-);5=Battery temperature sensor
-        scale: 1
-        precision: 0
-        slave: 247
-        address: 788
